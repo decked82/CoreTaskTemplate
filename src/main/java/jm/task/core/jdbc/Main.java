@@ -13,9 +13,9 @@ public class Main {
         userService.saveUser("Кевин",  "Де Брёйне", (byte) 29);
         userService.saveUser("Криштиану",  "Роналду", (byte) 36);
         userService.getAllUsers();
-//        userService.removeUserById(1);
-//        userService.cleanUsersTable();
-//        userService.dropUsersTable();
+        userService.removeUserById(3);
+        userService.cleanUsersTable();
+        userService.dropUsersTable();
 
     }
 }
