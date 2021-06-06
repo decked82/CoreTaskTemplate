@@ -11,11 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoHibernateImpl extends Util implements UserDao {
-    private  SessionFactory sessionFactory = getSession();
-    private Session session = null;
+    private  final SessionFactory sessionFactory = getSession();
     private Transaction transaction = null;
     private  User user;
-    private List<User> usersList = new ArrayList<>();
+    private final List<User> usersList = new ArrayList<>();
 
     public UserDaoHibernateImpl() {
 
