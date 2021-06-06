@@ -9,8 +9,6 @@ import java.util.List;
 
 public class UserDaoJDBCImpl extends Util implements UserDao {
     private Connection connection;
-    private Statement statement = null;
-    private ResultSet resultSet = null;
 
     public UserDaoJDBCImpl() {
 
@@ -47,8 +45,15 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
             statement.setString(2, lastName);
             statement.setByte(3, age);
             statement.executeUpdate();
+            connection.setAutoCommit(false);
+            connection.commit();
             System.out.println("User с именем - " + name + " добавлен в базу данных");
         } catch (SQLException throwables) {
+            try {
+                connection.rollback();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             throwables.printStackTrace();
         }
     }
@@ -59,8 +64,15 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setLong(1, id);
             statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            connection.setAutoCommit(false);
+            connection.commit();
+        } catch (SQLException throwables) {
+            try {
+                connection.rollback();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            throwables.printStackTrace();
         }
     }
 
@@ -90,8 +102,8 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
         try (Connection connection = getConnection();
             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 }
