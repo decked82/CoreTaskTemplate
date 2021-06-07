@@ -41,18 +41,21 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
         String sql = "INSERT INTO user (name, lastName, age) VALUES (?, ?, ?)";
         try (Connection connection = getConnection();
             PreparedStatement statement = connection.prepareStatement(sql)) {
+            connection.setAutoCommit(false);
             statement.setString(1, name);
             statement.setString(2, lastName);
             statement.setByte(3, age);
             statement.executeUpdate();
-            connection.setAutoCommit(false);
             connection.commit();
+            connection.setAutoCommit(true);
             System.out.println("User с именем - " + name + " добавлен в базу данных");
         } catch (SQLException throwables) {
-            try {
-                connection.rollback();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             throwables.printStackTrace();
         }
@@ -62,15 +65,18 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
         String sql = "DELETE FROM user WHERE id=?";
         try (Connection connection = getConnection();
             PreparedStatement statement = connection.prepareStatement(sql)) {
+            connection.setAutoCommit(false);
             statement.setLong(1, id);
             statement.executeUpdate();
-            connection.setAutoCommit(false);
             connection.commit();
+            connection.setAutoCommit(true);
         } catch (SQLException throwables) {
-            try {
-                connection.rollback();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
             throwables.printStackTrace();
         }
